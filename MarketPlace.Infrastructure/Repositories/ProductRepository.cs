@@ -46,8 +46,9 @@ namespace MarketPlace.Infrastructure.Repositories
             if (res != null)
             {
                 _mpDbContext.Products.Remove(res);
+                return "Deleted";
             }
-            return res == null ? "Not found" : "Deleted";
+            return "Not found";
         }
 
         public Task<string> UpdateAsync(Product product)

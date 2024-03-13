@@ -19,8 +19,8 @@ namespace MarketPlace.Application.Services
         public async Task<string> Add(ProductDTO pr)
         {
             var product = MapDTOToEntity(pr);
-            await _productRepository.InsertAsync(product);
-            return "Product added successfully";
+            var res = await _productRepository.InsertAsync(product);
+            return res;
         }
 
         public async Task<string> Delete(int id)
@@ -41,11 +41,16 @@ namespace MarketPlace.Application.Services
             return products;
         }
 
-        public async Task<string> Update(ProductDTO product)
+        public async Task<string> Update(int id, ProductDTO product)
         {
+            var res = await Get(id);
+            if (res == null)
+            {
+                return "Not Found";
+            }
             var entity = MapDTOToEntity(product);
-            await _productRepository.UpdateAsync(entity);
-            return "Product updated successfully";
+            var s = await _productRepository.UpdateAsync(entity);
+            return s;
         }
 
         private Product MapDTOToEntity(ProductDTO dto)

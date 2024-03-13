@@ -14,6 +14,6 @@ namespace MarketPlace.Application.Abstractions
         public Task<Product> Get(int id);
         public Task<string> Add(ProductDTO pr);
         public Task<string> Delete(int id);
-        public Task<string> Update(ProductDTO product);
+        public Task<string> Update(int id, ProductDTO product);
     }
 }
