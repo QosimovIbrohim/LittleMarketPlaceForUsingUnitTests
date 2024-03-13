@@ -16,7 +16,7 @@ namespace MarketPlace.Test
         public ServiceTest()
         {
             var md = new Mock<MpDbContext>();
-            _prRepo = new Mock<IProductRepository>(md);
+            _prRepo = new Mock<IProductRepository>(md);  
             _prServ = new Mock<IProductService>(_prRepo);
         }
 
