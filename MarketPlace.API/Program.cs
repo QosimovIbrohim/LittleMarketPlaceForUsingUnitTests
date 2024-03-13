@@ -1,4 +1,7 @@
 
+using MarketPlace.Application;
+using MarketPlace.Infrastructure;
+
 namespace MarketPlace.API
 {
     public class Program
@@ -8,6 +11,8 @@ namespace MarketPlace.API
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddInfrastruct(builder.Configuration);
+            builder.Services.AddAppLication();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
