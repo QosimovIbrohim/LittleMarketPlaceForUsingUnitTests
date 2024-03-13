@@ -1,4 +1,6 @@
-﻿using MarketPlace.Infrastructure.Persistance;
+﻿using MarketPlace.Application.Abstractions;
+using MarketPlace.Infrastructure.Persistance;
+using MarketPlace.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,6 +20,7 @@ namespace MarketPlace.Infrastructure
             {
                 ops.UseNpgsql(configuration.GetConnectionString("DefCon"));
             });
+            services.AddScoped<IProductRepository, ProductRepository>();
             return services;
         }
     }

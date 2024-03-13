@@ -1,4 +1,5 @@
-﻿using MarketPlace.Domain.DTOs;
+﻿using MarketPlace.Application.Abstractions;
+using MarketPlace.Domain.DTOs;
 using MarketPlace.Domain.Entities;
 using MarketPlace.Infrastructure.Persistance;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace MarketPlace.Infrastructure.Repositories
 {
-    public class ProductRepository
+    public class ProductRepository : IProductRepository
     {
         private readonly MpDbContext _mpDbContext;
 
@@ -49,10 +50,10 @@ namespace MarketPlace.Infrastructure.Repositories
             return res == null ? "Not found" : "Deleted";
         }
 
-        public async Task<string> UpdateAsync(Product product)
+        public Task<string> UpdateAsync(Product product)
         {
             _mpDbContext.Products.Update(product);
-            return "Updated";
+            return Task.FromResult("Updated");
         }
     }
 }
