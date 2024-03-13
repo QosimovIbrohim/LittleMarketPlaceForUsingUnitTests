@@ -48,8 +48,9 @@ namespace MarketPlace.Application.Services
             {
                 return "Not Found";
             }
-            var entity = MapDTOToEntity(product);
-            var s = await _productRepository.UpdateAsync(entity);
+            res.Name = product.Name;
+            res.Description = product.Description;
+            var s = await _productRepository.UpdateAsync(res);
             return s;
         }
 

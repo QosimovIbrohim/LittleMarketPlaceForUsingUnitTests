@@ -46,15 +46,17 @@ namespace MarketPlace.Infrastructure.Repositories
             if (res != null)
             {
                 _mpDbContext.Products.Remove(res);
+                await _mpDbContext.SaveChangesAsync();
                 return "Deleted";
             }
             return "Not found";
         }
 
-        public Task<string> UpdateAsync(Product product)
+        public async Task<string> UpdateAsync(Product product)
         {
             _mpDbContext.Products.Update(product);
-            return Task.FromResult("Updated");
+            await _mpDbContext.SaveChangesAsync();
+            return "Updated";
         }
     }
 }
