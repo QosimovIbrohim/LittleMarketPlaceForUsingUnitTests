@@ -16,51 +16,46 @@ namespace MarketPlace.Application.Services
             _productRepository = productRepository;
         }
 
-        public async Task<string> Add(ProductDTO pr)
+        public async ValueTask<Product> Add(Product pr)
         {
-            var product = MapDTOToEntity(pr);
-            var res = await _productRepository.InsertAsync(product);
-            return res;
+            return await _productRepository.InsertAsync(pr);
         }
-
-        public async Task<string> Delete(int id)
+        public async ValueTask<Product> Delete(int id)
         {
-            var result = await _productRepository.DeleteAsync(id);
-            return result;
-        }
-
-        public async Task<Product> Get(int id)
-        {
-            var product = await _productRepository.GetByIdAsync(id);
-            return product;
-        }
-
-        public async Task<List<Product>> GetAll()
-        {
-            var products = await _productRepository.GetAllAsync();
-            return products;
-        }
-
-        public async Task<string> Update(int id, ProductDTO product)
-        {
-            var res = await Get(id);
-            if (res == null)
+            var stPr = await _productRepository.GetByIdAsync(id);
+            if (stPr == null)
             {
-                return "Not Found";
+                throw new ArgumentException();
             }
-            res.Name = product.Name;
-            res.Description = product.Description;
-            var s = await _productRepository.UpdateAsync(res);
-            return s;
+            return await _productRepository.DeleteAsync(stPr);
         }
 
-        private Product MapDTOToEntity(ProductDTO dto)
+        public async ValueTask<Product> Get(int id)
         {
-            return new Product
+            var stPr = await _productRepository.GetByIdAsync(id);
+            if (stPr == null)
             {
-                Name = dto.Name,
-                Description = dto.Description
-            };
+                throw new Exception("");
+            }
+            return stPr;
+        }
+
+        public async ValueTask<List<Product>> GetAll()
+        {
+            return await _productRepository.GetAllAsync();
+        }
+
+        public async ValueTask<Product> Update(int id, Product product)
+        {
+            var stPr = await _productRepository.GetByIdAsync(id);
+
+            if (stPr == null)
+            {
+                throw new Exception("");
+            }
+            stPr.Name = product.Name;
+            stPr.Description = product.Description;
+            return await _productRepository.UpdateAsync(stPr);
         }
     }
 }

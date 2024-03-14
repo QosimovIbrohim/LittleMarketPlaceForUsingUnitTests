@@ -3,6 +3,7 @@ using MarketPlace.Domain.DTOs;
 using MarketPlace.Domain.Entities;
 using MarketPlace.Infrastructure.Persistance;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using System;
 using System.Collections.Generic;
@@ -22,41 +23,40 @@ namespace MarketPlace.Infrastructure.Repositories
             _mpDbContext = mpDbContext;
         }
 
-        public async Task<string> InsertAsync(Product pr)
+        public async ValueTask<Product> InsertAsync(Product pr)
         {
-            await _mpDbContext.Products.AddAsync(pr);
+            var entry = await _mpDbContext.Products.AddAsync(pr);
             await _mpDbContext.SaveChangesAsync();
-            return "Created";
+
+            return entry.Entity;
         }
 
-        public async Task<List<Product>> GetAllAsync()
+        public async ValueTask<List<Product>> GetAllAsync()
         {
             return await _mpDbContext.Products.ToListAsync();
         }
 
-        public async Task<Product> GetByIdAsync(int id)
+        public async ValueTask<Product> GetByIdAsync(int id)
         {
-            var res = await _mpDbContext.Products.FirstOrDefaultAsync(x => x.Id == id);
-            return res == null ? throw new NullReferenceException("Product is not found") : res;
+            var res = await _mpDbContext.Products.FindAsync(id);
+            return res;
         }
 
-        public async Task<string> DeleteAsync(int id)
+        public async ValueTask<Product> DeleteAsync(Product pr)
         {
-            var res = await _mpDbContext.Products.FirstOrDefaultAsync(x => x.Id == id);
-            if (res != null)
-            {
-                _mpDbContext.Products.Remove(res);
-                await _mpDbContext.SaveChangesAsync();
-                return "Deleted";
-            }
-            return "Not found";
-        }
 
-        public async Task<string> UpdateAsync(Product product)
-        {
-            _mpDbContext.Products.Update(product);
+            EntityEntry<Product>? entry = _mpDbContext.Products.Remove(pr);
             await _mpDbContext.SaveChangesAsync();
-            return "Updated";
+
+            return entry.Entity;
+        }
+
+        public async ValueTask<Product> UpdateAsync(Product product)
+        {
+           EntityEntry<Product>? entry =  _mpDbContext.Products.Update(product);
+            await _mpDbContext.SaveChangesAsync();
+
+            return entry.Entity;
         }
     }
 }
