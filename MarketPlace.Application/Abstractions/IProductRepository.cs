@@ -9,10 +9,10 @@ namespace MarketPlace.Application.Abstractions
 {
     public interface IProductRepository
     {
-        public Task<List<Product>> GetAllAsync();
-        public Task<Product> GetByIdAsync(int id);
-        public Task<string> InsertAsync(Product pr);
-        public Task<string> DeleteAsync(int id);
-        public Task<string> UpdateAsync(Product product);
+        public ValueTask<List<Product>> GetAllAsync();
+        public ValueTask<Product> GetByIdAsync(int id);
+        public ValueTask<Product> InsertAsync(Product pr);
+        public ValueTask<Product> DeleteAsync(Product pr);
+        public ValueTask<Product> UpdateAsync(Product pr);
     }
 }
